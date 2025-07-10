@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "NCBI Research Assistant": {
+      "command": "/Users/S228627/.local/bin/uv",
+      "args": [
+        "run",
+        "--with",
+        "mcp[cli]",
+        "mcp",
+        "run",
+        "/Users/S228627/Library/CloudStorage/OneDrive-UniversityofTexasSouthwestern/Desktop/projects/ncbi-mcp-server/ncbi_mcp_server/server.py"
+      ],
+      "env": {
+        "NCBI_EMAIL": "your.email@example.com"
+      }
+    }
+  }
+} 

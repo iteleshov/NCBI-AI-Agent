@@ -1,0 +1,32 @@
+# Python .gitignore
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pywz
+*.pyzw
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# VSCode
+.vscode/
+
+# Cursor
+.cursorrules
+
+# Virtual Environment
+venv/
+.venv/
+.env/
+.env.local/
+.env.development.local/
+.env.test.local/

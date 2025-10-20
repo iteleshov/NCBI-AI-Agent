@@ -1,0 +1,10 @@
+Starting MCP inspector...
+тЪЩя╕П Proxy server listening on localhost:6277
+ЁЯФС Session token: cb945d26dc8ea65b1325475fe0561f51b2f21c37ea6142649bcdd9e2023e9cd7
+   Use this token to authenticate requests or set DANGEROUSLY_OMIT_AUTH=true to disable auth
+
+ЁЯЪА MCP Inspector is up and running at:
+   http://localhost:6274/?MCP_PROXY_AUTH_TOKEN=cb945d26dc8ea65b1325475fe0561f51b2f21c37ea6142649bcdd9e2023e9cd7
+
+ЁЯМР Opening browser...
+Завершить выполнение пакетного файла [Y(да)/N(нет)]? 

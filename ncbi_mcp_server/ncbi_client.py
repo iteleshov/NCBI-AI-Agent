@@ -47,6 +47,7 @@ class SummaryResult(BaseModel):
     doi: Optional[str] = None
     pmid: Optional[str] = None
     abstract: Optional[str] = None
+    description: Optional[str] = None
 
 
 class BlastResult(BaseModel):
@@ -185,38 +186,81 @@ class NCBIClient:
         # Parse the result
         summaries = []
         if "eSummaryResult" in result:
-            doc_sum_list = result["eSummaryResult"]["DocSum"]
+            # ИСПРАВЛЕНИЕ: Разные структуры для разных баз данных
+            if database == 'gene':
+                # Для gene базы используем DocumentSummarySet
+                if "DocumentSummarySet" in result["eSummaryResult"]:
+                    doc_sum_set = result["eSummaryResult"]["DocumentSummarySet"]
+                    doc_sum_list = doc_sum_set.get("DocumentSummary", [])
+                else:
+                    doc_sum_list = []
+            else:
+                # Для других баз используем стандартную структуру DocSum
+                doc_sum_list = result["eSummaryResult"].get("DocSum", [])
+            
             if not isinstance(doc_sum_list, list):
                 doc_sum_list = [doc_sum_list]
 
             for doc_sum in doc_sum_list:
-                summary = SummaryResult(uid=doc_sum["Id"], title="", authors=[])
+                if database == 'gene':
+                    # ОСОБАЯ ОБРАБОТКА ДЛЯ GENE БАЗЫ
+                    summary = SummaryResult(
+                        uid=doc_sum.get("@uid", ""),
+                        title=doc_sum.get("Name", "Not available"),  # Используем Name вместо Title
+                        authors=[],  # У генов нет авторов
+                        journal=None,
+                        pub_date=None,
+                        doi=None,
+                        pmid=None
+                    )
+                    
+                    # Для генов добавляем дополнительные поля в description
+                    description_parts = []
+                    if doc_sum.get("Description"):
+                        description_parts.append(doc_sum["Description"])
+                    if doc_sum.get("Summary"):
+                        description_parts.append(doc_sum["Summary"])
+                    if doc_sum.get("Chromosome"):
+                        description_parts.append(f"Chromosome: {doc_sum['Chromosome']}")
+                    if doc_sum.get("MapLocation"):
+                        description_parts.append(f"Location: {doc_sum['MapLocation']}")
+                    
+                    if description_parts:
+                        summary.description = " | ".join(description_parts)
+                    
+                else:
+                    # СТАНДАРТНАЯ ОБРАБОТКА ДЛЯ ДРУГИХ БАЗ (protein, pubmed, etc.)
+                    summary = SummaryResult(
+                        uid=doc_sum.get("Id", ""), 
+                        title="", 
+                        authors=[]
+                    )
 
-                # Extract fields from Items
-                if "Item" in doc_sum:
-                    items = doc_sum["Item"]
-                    if not isinstance(items, list):
-                        items = [items]
+                    # Extract fields from Items (для protein/pubmed)
+                    if "Item" in doc_sum:
+                        items = doc_sum["Item"]
+                        if not isinstance(items, list):
+                            items = [items]
 
-                    for item in items:
-                        name = item.get("@Name", "")
-                        value = item.get("#text", "")
+                        for item in items:
+                            name = item.get("@Name", "")
+                            value = item.get("#text", "")
 
-                        if name == "Title":
-                            summary.title = value
-                        elif name == "AuthorList":
-                            if isinstance(value, str):
-                                summary.authors = [value]
-                            elif isinstance(value, list):
-                                summary.authors = value
-                        elif name == "FullJournalName":
-                            summary.journal = value
-                        elif name == "PubDate":
-                            summary.pub_date = value
-                        elif name == "DOI":
-                            summary.doi = value
-                        elif name == "PMID":
-                            summary.pmid = value
+                            if name == "Title":
+                                summary.title = value
+                            elif name == "AuthorList":
+                                if isinstance(value, str):
+                                    summary.authors = [value]
+                                elif isinstance(value, list):
+                                    summary.authors = value
+                            elif name == "FullJournalName":
+                                summary.journal = value
+                            elif name == "PubDate":
+                                summary.pub_date = value
+                            elif name == "DOI":
+                                summary.doi = value
+                            elif name == "PMID":
+                                summary.pmid = value
 
                 summaries.append(summary)
 

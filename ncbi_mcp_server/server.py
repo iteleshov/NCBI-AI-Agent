@@ -154,17 +154,27 @@ async def summarize_records(database: str, ids: List[str]) -> str:
 
         summary_data = []
         for summary in summaries:
-            summary_data.append(
-                {
+            if database == 'gene':
+                # Гены имеют другую структуру данных!
+                summary_data.append({
                     "uid": summary.uid,
-                    "title": summary.title,
-                    "authors": summary.authors,
-                    "journal": summary.journal,
-                    "pub_date": summary.pub_date,
-                    "doi": summary.doi,
-                    "pmid": summary.pmid,
-                }
-            )
+                    "name": getattr(summary, 'name', 'Not available'),
+                    "description": getattr(summary, 'description', 'Not available'),
+                    "chromosome": getattr(summary, 'chromosome', 'Not available'),
+                    "map_location": getattr(summary, 'map_location', 'Not available'),
+                    "gene_type": getattr(summary, 'type', 'Not available'),
+                })
+            else:
+                # Белки и статьи имеют стандартную структуру
+                summary_data.append({
+                    "uid": summary.uid,
+                    "title": getattr(summary, 'title', 'Not available'),
+                    "authors": getattr(summary, 'authors', []),
+                    "journal": getattr(summary, 'journal', 'Not available'),
+                    "pub_date": getattr(summary, 'pub_date', 'Not available'),
+                    "doi": getattr(summary, 'doi', None),
+                    "pmid": getattr(summary, 'pmid', None),
+                })
 
         return json.dumps(
             {"success": True, "database": database, "summaries": summary_data}, indent=2

@@ -1,0 +1,13 @@
+Need to install the following packages:
+@modelcontextprotocol/inspector@0.17.1
+Ok to proceed? (y) 
+Starting MCP inspector...
+тЪЩя╕П Proxy server listening on localhost:6277
+ЁЯФС Session token: ca1f48fee6b69e4404fa925aec8112dafa5bb8a0d307778c40283d443bd78307
+   Use this token to authenticate requests or set DANGEROUSLY_OMIT_AUTH=true to disable auth
+
+ЁЯЪА MCP Inspector is up and running at:
+   http://localhost:6274/?MCP_PROXY_AUTH_TOKEN=ca1f48fee6b69e4404fa925aec8112dafa5bb8a0d307778c40283d443bd78307
+
+ЁЯМР Opening browser...
+Завершить выполнение пакетного файла [Y(да)/N(нет)]? 

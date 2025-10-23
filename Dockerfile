@@ -25,4 +25,4 @@ RUN uv sync
 EXPOSE 3002
 
 # Запуск сервера
-ENTRYPOINT ["sh", "-c", "uv run ncbi_mcp_server"]
+ENTRYPOINT ["sh", "-c", "uv run ncbi_mcp"]

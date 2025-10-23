@@ -1,16 +1,12 @@
-# Используем легковесный Python
+# Берём легковесный Python
 FROM python:3.11-slim
 
 # Устанавливаем необходимые инструменты
 RUN apt-get update && apt-get install -y \
-    curl \
-    git \
     build-essential \
+    git \
+    curl \
     && rm -rf /var/lib/apt/lists/*
-
-# Устанавливаем uv
-RUN curl -LsSf https://astral.sh/uv/install.sh | sh
-ENV PATH="/root/.local/bin:$PATH"
 
 # Рабочая директория
 WORKDIR /app
@@ -18,11 +14,12 @@ WORKDIR /app
 # Копируем проект
 COPY . .
 
-# Устанавливаем зависимости через uv
-RUN uv sync
+# Устанавливаем зависимости через pip
+RUN pip install --upgrade pip
+RUN pip install -e .
 
-# Открываем порт
+# Открываем порт (меняй под свой uv сервер)
 EXPOSE 3002
 
 # Запуск сервера
-ENTRYPOINT ["sh", "-c", "uv run ncbi_mcp"]
+ENTRYPOINT ["python", "-m", "ncbi_mcp_server"]

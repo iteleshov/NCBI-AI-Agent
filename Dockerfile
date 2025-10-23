@@ -15,4 +15,4 @@ EXPOSE 3002
 
 RUN uv sync
 
-ENTRYPOINT ["sh", "-c", "uv ncbi_mcp && tail -f /dev/null"]
+ENTRYPOINT ["sh", "-c", "uv NCBI_MCP && tail -f /dev/null"]

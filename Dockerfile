@@ -13,4 +13,6 @@ COPY . .
 
 EXPOSE 3002
 
-ENTRYPOINT ["sh", "-c", "uv ncbi-mcp-server && tail -f /dev/null"]
+RUN uv sync
+
+ENTRYPOINT ["uv", "run", "mcp", "ncbi_mcp_server/server.py"]

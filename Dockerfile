@@ -25,4 +25,4 @@ RUN uv sync
 EXPOSE 3002
 
 # Запуск сервера
-ENTRYPOINT ["python", "ncbi_mcp_server/server.py"] так не сработает?
+ENTRYPOINT ["python", "ncbi_mcp_server/server.py"]

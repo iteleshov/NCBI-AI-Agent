@@ -30,3 +30,10 @@ venv/
 .env.local/
 .env.development.local/
 .env.test.local/
+
+# API Keys and Secrets
+secret.txt
+NCBI_API_KEY.txt
+*.key
+*.pem
+*.crt
